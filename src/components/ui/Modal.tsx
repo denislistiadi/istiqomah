@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from '@phosphor-icons/react';
 
@@ -19,6 +20,12 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   maxWidth = 'md',
 }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Handle ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,10 +57,10 @@ export const Modal: React.FC<ModalProps> = ({
     full: 'sm:max-w-3xl',
   }[maxWidth];
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 overscroll-contain">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 overscroll-contain">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -67,11 +74,11 @@ export const Modal: React.FC<ModalProps> = ({
 
           {/* Modal Panel Container */}
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.98 }}
+            initial={{ opacity: 0, y: 70, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 32 }}
-            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[28px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl shadow-zinc-950/40 dark:shadow-black/90 max-h-[88dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 pb-safe pb-6 sm:pb-6`}
+            exit={{ opacity: 0, y: 50, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[28px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl shadow-zinc-950/50 dark:shadow-black/95 max-h-[85dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 pb-safe pb-6 sm:pb-6`}
           >
             {/* Mobile Sheet Pull Indicator */}
             <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-3 sm:hidden shrink-0" />
@@ -111,5 +118,11 @@ export const Modal: React.FC<ModalProps> = ({
       )}
     </AnimatePresence>
   );
+
+  if (!mounted || typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(modalContent, document.body);
 };
 
