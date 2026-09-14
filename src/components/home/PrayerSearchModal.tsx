@@ -67,7 +67,7 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
       onClose={onClose}
       title="Cari Doa & Dzikir Shahih"
       subtitle="Temukan rujukan doa yang tepat dari Al-Quran dan Hadis sesuai hajat atau keadaanmu"
-      maxWidth="md"
+      maxWidth="lg"
     >
       <div className="space-y-4 pt-1">
         {/* Active Model Indicator */}
@@ -88,8 +88,8 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Tulis hajatmu (misal: hati sedang gelisah, menjelang ujian, rezeki halal)..."
-              className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl pl-10 pr-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-xs"
+              placeholder="Tulis hajatmu (misal: hati sedang gelisah, rezeki halal)..."
+              className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl pl-10 pr-4 py-3 text-base sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-xs"
             />
             <MagnifyingGlass
               size={18}

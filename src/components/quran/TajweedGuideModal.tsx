@@ -47,7 +47,7 @@ export const TajweedGuideModal: React.FC<TajweedGuideModalProps> = ({
       onClose={onClose}
       title="Panduan Lengkap Ilmu Tajwid"
       subtitle="Kamus warna dan kaidah hukum membaca Al-Quran sesuai kaidah shahih"
-      maxWidth="lg"
+      maxWidth="xl"
     >
       <div className="space-y-5 pb-2">
         {/* Search & Category Filter */}

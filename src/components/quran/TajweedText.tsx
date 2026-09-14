@@ -82,14 +82,14 @@ export const TajweedText: React.FC<TajweedTextProps> = ({
       {activeRule && (
         <div
           dir="ltr"
-          className="mt-3 p-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-emerald-500/30 shadow-lg shadow-emerald-950/10 dark:shadow-black/60 text-left animate-in fade-in slide-in-from-top-2 duration-150 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+          className="fixed bottom-24 left-4 right-4 z-40 max-w-lg mx-auto sm:relative sm:bottom-auto sm:left-auto sm:right-auto sm:mt-3 sm:z-10 p-4 rounded-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-emerald-500/40 shadow-2xl shadow-zinc-950/30 dark:shadow-black/80 text-left animate-in fade-in slide-in-from-bottom-3 duration-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
         >
-          <div className="flex items-start gap-2.5">
+          <div className="flex items-start gap-3 min-w-0 flex-1">
             <div
-              className="w-3.5 h-3.5 rounded-full mt-1 shrink-0 ring-2 ring-white dark:ring-zinc-800"
+              className="w-4 h-4 rounded-full mt-1 shrink-0 ring-2 ring-white dark:ring-zinc-800 shadow-xs"
               style={{ backgroundColor: activeRule.colorHex }}
             />
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs font-bold text-zinc-900 dark:text-white">
                   {activeRule.name}
@@ -107,7 +107,7 @@ export const TajweedText: React.FC<TajweedTextProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100 dark:border-zinc-800 shrink-0">
             {onOpenTajweedGuide && (
               <button
                 type="button"
@@ -115,7 +115,7 @@ export const TajweedText: React.FC<TajweedTextProps> = ({
                   onOpenTajweedGuide(activeRule.id);
                   setActiveRule(null);
                 }}
-                className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 py-1 px-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60"
+                className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1 py-1.5 px-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60"
               >
                 <Info size={14} />
                 <span>Pelajari Kaidah</span>
@@ -124,7 +124,7 @@ export const TajweedText: React.FC<TajweedTextProps> = ({
             <button
               type="button"
               onClick={() => setActiveRule(null)}
-              className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1"
+              className="text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1.5"
             >
               Tutup
             </button>

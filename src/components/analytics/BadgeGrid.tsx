@@ -74,7 +74,7 @@ export const BadgeGrid: React.FC<BadgeGridProps> = ({ badges }) => {
         isOpen={Boolean(selectedBadge)}
         onClose={() => setSelectedBadge(null)}
         title={selectedBadge?.title}
-        maxWidth="sm"
+        maxWidth="md"
       >
         {selectedBadge && (
           <div className="space-y-4 pt-1 text-center">

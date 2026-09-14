@@ -62,7 +62,7 @@ export const AddHabitModal: React.FC<AddHabitModalProps> = ({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Contoh: Sedekah Shubuh, Baca Surah Al-Kahfi"
-            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-xs"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-base sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-xs"
           />
         </div>
 
@@ -99,7 +99,7 @@ export const AddHabitModal: React.FC<AddHabitModalProps> = ({
           <select
             value={timeOfDay}
             onChange={(e) => setTimeOfDay(e.target.value as TimeOfDay)}
-            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500 shadow-xs"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-base sm:text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500 shadow-xs"
           >
             <option value="subuh">Waktu Subuh</option>
             <option value="siang">Waktu Siang / Dzuhur / Ashar</option>
@@ -118,7 +118,7 @@ export const AddHabitModal: React.FC<AddHabitModalProps> = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Contoh: Minimal Rp 10.000 / Setiap hari Jumat"
-            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 shadow-xs"
+            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl px-4 py-3 text-base sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 shadow-xs"
           />
         </div>
 
