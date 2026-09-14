@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '@/lib/db';
 import { getSurahAyahs, getAllSurahs, initOfflineQuranData } from '@/lib/quran-data';
+import { logError } from '@/lib/logger';
 import { Ayah, SurahMeta } from '@/types';
 import { DEFAULT_QURAN_STATE, TOTAL_AYAH_IN_QURAN } from '@/lib/constants';
 
@@ -27,7 +28,7 @@ export function useQuranReader(initialSurah: number = 1) {
       const loadedAyahs = await getSurahAyahs(surahNum);
       setAyahs(loadedAyahs);
     } catch (err: any) {
-      console.error('Error loading surah ayahs:', err);
+      logError('Error loading surah ayahs:', err);
       setFetchError('Tidak dapat memuat ayat Al-Quran. Periksa koneksi internet Anda untuk mengunduh pertama kali.');
     } finally {
       setIsLoadingAyahs(false);

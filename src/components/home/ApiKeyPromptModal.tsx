@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { encryptApiKey } from '@/lib/crypto';
+import { logError } from '@/lib/logger';
 import { db } from '@/lib/db';
 import { Key, Eye, EyeSlash, ShieldCheck, Sparkle, ArrowSquareOut, GearSix } from '@phosphor-icons/react';
 
@@ -39,7 +40,7 @@ export const ApiKeyPromptModal: React.FC<ApiKeyPromptModalProps> = ({
       if (onSuccessSave) onSuccessSave();
       onClose();
     } catch (err) {
-      console.error('Failed to encrypt and save API key:', err);
+      logError('Failed to encrypt and save API key:', err);
     } finally {
       setIsSaving(false);
     }
@@ -82,6 +83,9 @@ export const ApiKeyPromptModal: React.FC<ApiKeyPromptModalProps> = ({
                 value={apiKeyInput}
                 onChange={(e) => setApiKeyInput(e.target.value)}
                 placeholder="Tempelkan API Key (AIzaSy...)"
+                autoComplete="off"
+                data-1p-ignore
+                data-lpignore="true"
                 className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl pl-10 pr-11 py-3 text-base sm:text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-xs font-mono"
               />
               <Key

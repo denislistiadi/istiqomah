@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Key, Eye, EyeSlash, Trash, ShieldCheck } from '@phosphor-icons/react';
 import { encryptApiKey } from '@/lib/crypto';
+import { logError } from '@/lib/logger';
 import { Button } from '../ui/Button';
 
 export interface ApiKeyInputProps {
@@ -28,7 +29,7 @@ export const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
       await onSaveKey(encryptedData);
       setApiKeyInput('');
     } catch (err) {
-      console.error('Failed to encrypt and save API key:', err);
+      logError('Failed to encrypt and save API key:', err);
     } finally {
       setIsSaving(false);
     }
@@ -58,6 +59,9 @@ export const ApiKeyInput: React.FC<ApiKeyInputProps> = ({
             value={apiKeyInput}
             onChange={(e) => setApiKeyInput(e.target.value)}
             placeholder={hasKey ? '•••••••••••••••••••••••• (Tersimpan)' : 'Masukkan API Key (AIzaSy...)'}
+            autoComplete="off"
+            data-1p-ignore
+            data-lpignore="true"
             className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700/80 rounded-2xl pl-4 pr-11 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-xs"
           />
           <button

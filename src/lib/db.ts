@@ -1,6 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { Settings, Habit, DailyLog, QuranState, Ayah } from '@/types';
 import { DEFAULT_HABITS, DEFAULT_SETTINGS, DEFAULT_QURAN_STATE } from './constants';
+import { logError } from './logger';
 
 export class IstiqomahDatabase extends Dexie {
   settings!: EntityTable<Settings, 'id'>;
@@ -48,6 +49,6 @@ export async function ensureInitialDbData() {
       await db.quranState.add(DEFAULT_QURAN_STATE);
     }
   } catch (error) {
-    console.error('Error initializing default database data:', error);
+    logError('Error initializing default database data:', error);
   }
 }

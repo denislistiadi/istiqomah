@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { DownloadSimple, UploadSimple, ArrowsClockwise, Warning } from '@phosphor-icons/react';
 import { exportUserData, downloadJsonFile, importUserData, resetAllData } from '@/lib/data-manager';
+import { logError } from '@/lib/logger';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 
@@ -22,7 +23,7 @@ export const DataManager: React.FC<DataManagerProps> = ({ onSuccess, onError }) 
       downloadJsonFile(json, filename);
       onSuccess('Alhamdulillah, berkas cadangan data berhasil diunduh.');
     } catch (err) {
-      console.error(err);
+      logError('Failed to export data:', err);
       onError('Maaf, gagal membuat berkas cadangan data.');
     } finally {
       setIsProcessing(false);
@@ -39,7 +40,7 @@ export const DataManager: React.FC<DataManagerProps> = ({ onSuccess, onError }) 
       await importUserData(text);
       onSuccess('Alhamdulillah, seluruh data amalan dan khatam berhasil dipulihkan.');
     } catch (err: any) {
-      console.error(err);
+      logError('Failed to import data:', err);
       onError('Format berkas tidak sesuai atau data rusak.');
     } finally {
       setIsProcessing(false);
@@ -54,7 +55,7 @@ export const DataManager: React.FC<DataManagerProps> = ({ onSuccess, onError }) 
       setIsResetModalOpen(false);
       onSuccess('Data aplikasi telah dikembalikan ke awal.');
     } catch (err) {
-      console.error(err);
+      logError('Failed to reset data:', err);
       onError('Gagal mereset data.');
     } finally {
       setIsProcessing(false);

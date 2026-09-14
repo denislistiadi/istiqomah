@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '@/lib/db';
 import { getTodayDateString } from '@/lib/streak';
 import { DailyLog } from '@/types';
+import { logError } from '@/lib/logger';
 
 export function useDailyLog(selectedDate?: string) {
   const targetDate = selectedDate || getTodayDateString();
@@ -41,7 +42,7 @@ export function useDailyLog(selectedDate?: string) {
         await db.dailyLogs.add(newLog);
       }
     } catch (err) {
-      console.error('Error toggling habit:', err);
+      logError('Error toggling habit:', err);
     }
   };
 

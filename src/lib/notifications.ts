@@ -1,6 +1,9 @@
+import { logError } from './logger';
+import { logWarn } from './logger';
+
 export async function requestNotificationPermission(): Promise<boolean> {
   if (!('Notification' in window)) {
-    console.warn('Notification API is not supported in this browser.');
+    logWarn('Notification API is not supported in this browser.');
     return false;
   }
 
@@ -28,7 +31,7 @@ export function showNotification(title: string, options?: NotificationOptions) {
       ...options,
     });
   } catch (err) {
-    console.error('Failed to trigger notification:', err);
+    logError('Failed to trigger notification:', err);
   }
 }
 

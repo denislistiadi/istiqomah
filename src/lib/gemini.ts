@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { db } from './db';
 import { decryptApiKey } from './crypto';
+import { logError } from './logger';
 import { GeminiPrayerResponse, GeminiModel } from '@/types';
 
 export interface PrayerSearchOptions {
@@ -69,7 +70,7 @@ Pastikan teks Arab memiliki harakat lengkap. Jangan gunakan em-dash pada seluruh
 
     return parsed;
   } catch (error: any) {
-    console.error('Gemini API Error:', error);
+    logError('Gemini API Error:', error);
     const errorMessage = error?.message || '';
 
     if (errorMessage.includes('API_KEY_INVALID') || errorMessage.includes('401') || errorMessage.includes('403')) {

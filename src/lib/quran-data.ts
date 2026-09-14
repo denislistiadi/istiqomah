@@ -1,6 +1,7 @@
 import { db } from './db';
 import { Ayah, SurahMeta } from '@/types';
 import { SURAH_LIST_METADATA } from './constants';
+import { logError } from './logger';
 
 // Initial offline data for Al-Fatihah and Surah Pendek with Tajweed annotations
 const INITIAL_OFFLINE_AYAHS: Ayah[] = [
@@ -213,7 +214,7 @@ export async function getSurahAyahs(surahNumber: number): Promise<Ayah[]> {
 
     return ayahsToSave;
   } catch (err) {
-    console.error('Fetch surah error:', err);
+    logError('Fetch surah error:', err);
     // Return whatever local data we have if offline
     if (localAyahs.length > 0) {
       return localAyahs;
