@@ -67,7 +67,7 @@ Sebagian besar aplikasi pencatat ibadah mewajibkan pembuatan akun, menyimpan cat
 ### 5. Pengaturan & Pengalaman Antarmuka PWA
 - **Instalasi PWA Terpadu**: Dialog panduan pemasangan otomatis (`PwaInstallModal`) dengan deteksi perangkat cerdas (Chrome Android, Safari iOS / Tambah ke Layar Utama, Desktop Chrome/Edge), serta kartu status instalasi di Pengaturan.
 - **Dukungan Dual-Theme Mandiri**: Mode Gelap (Zinc-950 off-black) dan Mode Terang (Slate-50) dengan kontras teks yang memenuhi standar WCAG AA.
-- **Desain Mobile-First & Gestur Sentuh**: Seluruh dialog popup dirancang sebagai lembar modal bawah (bottom sheet) yang mendukung gestur geser turun (drag-to-dismiss) untuk menutup tampilan.
+- **Desain Mobile-First & Gestur Sentuh**: Seluruh dialog popup dirancang sebagai bottom sheet modal yang mendukung gestur geser turun (drag-to-dismiss) untuk menutup tampilan.
 - **Manajemen Cadangan Data (Backup & Restore)**: Unduh salinan data format JSON (mencakup pengaturan, amalan, riwayat harian, status tilawah, dan koleksi doa tersimpan) dan pulihkan kapan saja secara mandiri.
 
 ---
@@ -84,7 +84,7 @@ Aplikasi ini telah melalui audit keamanan menyeluruh berbasis ancaman sisi klien
 | **SEC-04** | Content Security Policy | Konfigurasi tag meta CSP ketat pada `index.html` yang mengunci koneksi keluar hanya ke domain resmi Google Generative AI dan Al-Quran Cloud API. |
 | **SEC-05** | Isolasi Informasi Debug | Pemanggilan logging kesalahan diisolasi menggunakan utilitas `logger.ts` yang hanya aktif pada mode pengembangan (`import.meta.env.DEV`), mencegah kebocoran jejak stack trace pada rilis produksi. |
 | **SEC-06** | Standar Header HTTP | Konfigurasi file `_headers` dan `netlify.toml` menerapkan `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, dan `Permissions-Policy`. |
-| **SEC-07** | Proteksi Autofill Kredensial | Kolom input API Key dilengkapi atribut `autoComplete="off"`, `data-1p-ignore`, dan `data-lpignore="true"` untuk mencegah intervensi pengelola kata sandi peramban. |
+| **SEC-07** | Proteksi Autofill Kredensial | Kolom input API Key dilengkapi atribut `autoComplete="off"`, `data-1p-ignore`, dan `data-lpignore="true"` untuk mencegah intervensi pengelola kata sandi browser. |
 
 ---
 

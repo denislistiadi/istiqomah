@@ -36,7 +36,7 @@ export const PwaInstallCard: React.FC<PwaInstallCardProps> = ({
         <p className="leading-relaxed">
           {isAppMode
             ? 'Istiqomah telah terpasang sebagai aplikasi mandiri di perangkat ini. Anda dapat mengakses seluruh fitur secara offline kapan saja.'
-            : 'Pasang aplikasi Istiqomah langsung ke layar utama ponsel atau komputer Anda untuk akses kilat dan pengalaman layar penuh tanpa bilah peramban.'}
+            : 'Pasang aplikasi Istiqomah langsung ke layar utama ponsel atau komputer Anda untuk akses kilat dan pengalaman layar penuh tanpa bilah browser.'}
         </p>
 
         {!isAppMode && (

@@ -67,7 +67,7 @@ export const PwaInstallModal: React.FC<PwaInstallModalProps> = ({
                 1-Tap Layar Utama
               </div>
               <div className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5">
-                Buka instan tanpa perlu mengetik URL peramban.
+                Buka instan tanpa perlu mengetik URL browser.
               </div>
             </div>
           </div>
@@ -95,7 +95,7 @@ export const PwaInstallModal: React.FC<PwaInstallModalProps> = ({
                 Layar Penuh Mandiri
               </div>
               <div className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5">
-                Pengalaman aplikasi native tanpa bilah peramban.
+                Pengalaman aplikasi native tanpa bilah browser.
               </div>
             </div>
           </div>

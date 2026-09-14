@@ -41,5 +41,6 @@ pnpm-debug.log*
 
 # Temporary files
 taste-skill-full.md
+article-*.mdx
 .turbo/
 .cache/
