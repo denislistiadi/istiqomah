@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, PanInfo, useDragControls } from 'motion/react';
 import { X } from '@phosphor-icons/react';
 
 export interface ModalProps {
@@ -21,6 +21,7 @@ export const Modal: React.FC<ModalProps> = ({
   maxWidth = 'md',
 }) => {
   const [mounted, setMounted] = useState(false);
+  const dragControls = useDragControls();
 
   useEffect(() => {
     setMounted(true);
@@ -48,6 +49,13 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen]);
 
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    // If dragged downwards more than 80px or with strong downward velocity (> 300px/s)
+    if (info.offset.y > 80 || (info.offset.y > 30 && info.velocity.y > 300)) {
+      onClose();
+    }
+  };
+
   const maxWClasses = {
     sm: 'sm:max-w-sm',
     md: 'sm:max-w-md',
@@ -72,16 +80,26 @@ export const Modal: React.FC<ModalProps> = ({
             aria-hidden="true"
           />
 
-          {/* Modal Panel Container */}
+          {/* Modal Panel Container with Drag to Dismiss */}
           <motion.div
             initial={{ opacity: 0, y: 70, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.98 }}
+            exit={{ opacity: 0, y: 100, scale: 0.98 }}
             transition={{ type: 'spring', stiffness: 420, damping: 34 }}
-            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[28px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl shadow-zinc-950/50 dark:shadow-black/95 max-h-[85dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 pb-safe pb-6 sm:pb-6`}
+            drag="y"
+            dragDirectionLock
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0.05, bottom: 0.6 }}
+            onDragEnd={handleDragEnd}
+            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[28px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl shadow-zinc-950/50 dark:shadow-black/95 max-h-[85dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 pb-safe pb-6 sm:pb-6 touch-manipulation`}
           >
-            {/* Mobile Sheet Pull Indicator */}
-            <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-3 sm:hidden shrink-0" />
+            {/* Mobile Sheet Pull Indicator Area */}
+            <div
+              className="w-full flex items-center justify-center py-2 -mt-3 mb-1 sm:hidden cursor-grab active:cursor-grabbing touch-none select-none"
+              onPointerDown={(e) => dragControls.start(e)}
+            >
+              <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full hover:bg-zinc-400 dark:hover:bg-zinc-600 transition-colors" />
+            </div>
 
             {/* Header */}
             {(title || subtitle) && (
@@ -101,7 +119,7 @@ export const Modal: React.FC<ModalProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-1.5 -mr-1 rounded-xl text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors shrink-0"
+                  className="p-1.5 -mr-1 rounded-xl text-zinc-400 dark:text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 transition-colors shrink-0 cursor-pointer"
                   aria-label="Tutup popup"
                 >
                   <X size={20} weight="bold" />
@@ -125,4 +143,5 @@ export const Modal: React.FC<ModalProps> = ({
 
   return createPortal(modalContent, document.body);
 };
+
 
