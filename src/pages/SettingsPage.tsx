@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/settings/ThemeToggle';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
 import { DataManager } from '@/components/settings/DataManager';
 import { ToastMessage, ToastContainer } from '@/components/ui/Toast';
-import { Info, Heart } from '@phosphor-icons/react';
+import { Info } from '@phosphor-icons/react';
 
 export const SettingsPage: React.FC = () => {
   const settings = useLiveQuery(() => db.settings.get('main'));
@@ -120,10 +120,8 @@ export const SettingsPage: React.FC = () => {
         <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm mx-auto">
           Aplikasi PWA pelacak kebiasaan ibadah Islami harian yang 100% berjalan di peramban perangkat Anda (IndexedDB), tanpa peladen eksternal, menjaga privasi data Anda sepenuhnya.
         </p>
-        <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center gap-1 text-[11px] text-zinc-500">
-          <span>Dibuat dengan</span>
-          <Heart size={12} weight="fill" className="text-rose-500" />
-          <span>untuk ummat Islam sedunia • Versi 1.0.0</span>
+        <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-[11px] text-zinc-500">
+          <span>Versi 1.0.0 • Istiqomah PWA</span>
         </div>
       </section>
 
