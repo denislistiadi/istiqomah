@@ -8,10 +8,21 @@ import { ApiKeyGuide } from '@/components/settings/ApiKeyGuide';
 import { ThemeToggle } from '@/components/settings/ThemeToggle';
 import { NotificationSettings } from '@/components/settings/NotificationSettings';
 import { DataManager } from '@/components/settings/DataManager';
+import { PwaInstallCard } from '@/components/settings/PwaInstallCard';
 import { ToastMessage, ToastContainer } from '@/components/ui/Toast';
 import { Info } from '@phosphor-icons/react';
 
-export const SettingsPage: React.FC = () => {
+export interface SettingsPageProps {
+  onOpenInstallModal?: () => void;
+  isInstalled?: boolean;
+  isStandalone?: boolean;
+}
+
+export const SettingsPage: React.FC<SettingsPageProps> = ({
+  onOpenInstallModal,
+  isInstalled = false,
+  isStandalone = false,
+}) => {
   const settings = useLiveQuery(() => db.settings.get('main'));
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
@@ -111,6 +122,15 @@ export const SettingsPage: React.FC = () => {
         />
       </section>
 
+      {/* PWA Installation */}
+      <section className="p-5 rounded-3xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/80 space-y-4 shadow-xs">
+        <PwaInstallCard
+          isInstalled={isInstalled}
+          isStandalone={isStandalone}
+          onOpenInstallModal={onOpenInstallModal ?? (() => {})}
+        />
+      </section>
+
       {/* About Application */}
       <section className="p-5 rounded-3xl bg-gradient-to-br from-slate-50 to-white dark:from-zinc-900/80 dark:to-zinc-950 border border-zinc-200 dark:border-zinc-800/80 space-y-3 text-center shadow-xs">
         <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400">
@@ -118,7 +138,7 @@ export const SettingsPage: React.FC = () => {
           <span>Tentang Istiqomah</span>
         </div>
         <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm mx-auto">
-          Aplikasi PWA pelacak kebiasaan ibadah Islami harian yang 100% berjalan di peramban perangkat Anda (IndexedDB), tanpa peladen eksternal, menjaga privasi data Anda sepenuhnya.
+          Aplikasi PWA pelacak kebiasaan ibadah Islami harian yang 100% berjalan di browser perangkat Anda (IndexedDB), tanpa server eksternal, menjaga privasi data Anda sepenuhnya.
         </p>
         <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800/80 flex items-center justify-center text-[11px] text-zinc-500">
           <span>Versi 1.0.0 • Istiqomah PWA</span>

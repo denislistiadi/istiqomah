@@ -8,13 +8,26 @@ import { QuranPage } from '@/pages/QuranPage';
 import { AnalyticsPage } from '@/pages/AnalyticsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ApiKeyPromptModal } from '@/components/home/ApiKeyPromptModal';
+import { PwaInstallModal } from '@/components/ui/PwaInstallModal';
+import { usePwaInstall } from '@/hooks/usePwaInstall';
 import { useTheme } from '@/hooks/useTheme';
 import { scrollToTop } from '@/lib/scroll';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('home');
   const [isApiKeyPromptOpen, setIsApiKeyPromptOpen] = useState(false);
+  const [isPwaModalOpen, setIsPwaModalOpen] = useState(false);
   const settings = useLiveQuery(() => db.settings.get('main'));
+
+  const {
+    isInstallable,
+    isStandalone,
+    isIos,
+    isInstalled,
+    isSnoozed,
+    snooze,
+    promptInstall,
+  } = usePwaInstall();
 
   // Initialize theme listener
   useTheme();
@@ -36,6 +49,21 @@ export function App() {
     }
   }, [settings]);
 
+  // Auto-prompt PWA installation if installable, not standalone, and not snoozed
+  useEffect(() => {
+    if (isStandalone || isInstalled) return;
+    if (isSnoozed()) return;
+    if (isApiKeyPromptOpen) return;
+
+    const timer = setTimeout(() => {
+      if (!isSnoozed() && !isStandalone && (isInstallable || isIos)) {
+        setIsPwaModalOpen(true);
+      }
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [isStandalone, isInstalled, isInstallable, isIos, isSnoozed, isApiKeyPromptOpen]);
+
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
     scrollToTop('smooth');
@@ -51,6 +79,18 @@ export function App() {
     handleTabChange('settings');
   };
 
+  const handleClosePwaModal = () => {
+    snooze();
+    setIsPwaModalOpen(false);
+  };
+
+  const handleInstallPwa = async () => {
+    const result = await promptInstall();
+    if (result === 'accepted' || result === 'dismissed') {
+      setIsPwaModalOpen(false);
+    }
+  };
+
   useEffect(() => {
     scrollToTop('smooth');
   }, [activeTab]);
@@ -63,7 +103,13 @@ export function App() {
         )}
         {activeTab === 'quran' && <QuranPage />}
         {activeTab === 'analytics' && <AnalyticsPage />}
-        {activeTab === 'settings' && <SettingsPage />}
+        {activeTab === 'settings' && (
+          <SettingsPage
+            onOpenInstallModal={() => setIsPwaModalOpen(true)}
+            isInstalled={isInstalled}
+            isStandalone={isStandalone}
+          />
+        )}
       </AppShell>
 
       {/* Initial API Key Prompt Modal */}
@@ -71,6 +117,15 @@ export function App() {
         isOpen={isApiKeyPromptOpen}
         onClose={handleCloseApiKeyPrompt}
         onGoToSettings={handleGoToSettingsFromPrompt}
+      />
+
+      {/* PWA Install Modal */}
+      <PwaInstallModal
+        isOpen={isPwaModalOpen}
+        onClose={handleClosePwaModal}
+        onInstall={handleInstallPwa}
+        isIos={isIos}
+        isInstalled={isInstalled}
       />
     </>
   );
