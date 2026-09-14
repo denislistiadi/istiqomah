@@ -7,12 +7,13 @@ import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Skeleton } from '../ui/Skeleton';
-import { MagnifyingGlass, Sparkle, PlusCircle, BookBookmark, WarningCircle } from '@phosphor-icons/react';
+import { MagnifyingGlass, Sparkle, PlusCircle, BookBookmark, WarningCircle, Check } from '@phosphor-icons/react';
 
 export interface PrayerSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddAsHabit: (title: string, description: string) => void;
+  onAddAsHabit: (prayer: GeminiPrayerResponse) => Promise<void> | void;
+  onSavePrayerOnly: (prayer: GeminiPrayerResponse) => Promise<void> | void;
   onOpenSettings: () => void;
 }
 
@@ -20,6 +21,7 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
   isOpen,
   onClose,
   onAddAsHabit,
+  onSavePrayerOnly,
   onOpenSettings,
 }) => {
   const settings = useLiveQuery(() => db.settings.get('main'));
@@ -27,9 +29,10 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<GeminiPrayerResponse | null>(null);
   const [errorType, setErrorType] = useState<string | null>(null);
+  const [isSavedToCollection, setIsSavedToCollection] = useState(false);
 
   const hasApiKey = Boolean(settings?.encryptedApiKey);
-  const activeModel = settings?.geminiModel || 'gemini-2.0-flash';
+  const activeModel = settings?.geminiModel || 'gemini-3.6-flash';
 
   const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -43,6 +46,7 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
     setIsLoading(true);
     setErrorType(null);
     setResult(null);
+    setIsSavedToCollection(false);
 
     try {
       const data = await searchIslamicPrayer(query);
@@ -54,10 +58,17 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
     }
   };
 
-  const handleAddToHabits = () => {
+  const handleAddToHabits = async () => {
     if (result) {
-      onAddAsHabit(result.title, `${result.source}: ${result.benefit}`);
+      await onAddAsHabit(result);
       onClose();
+    }
+  };
+
+  const handleSaveToCollectionOnly = async () => {
+    if (result) {
+      await onSavePrayerOnly(result);
+      setIsSavedToCollection(true);
     }
   };
 
@@ -74,11 +85,16 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
         <div className="flex items-center justify-between text-xs px-1">
           <div className="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400">
             <Sparkle size={14} className="text-amber-500" />
-            <span>Pencarian Cerdas:</span>
+            <span>Model AI Aktif:</span>
           </div>
-          <Badge variant="gold" size="sm">
-            {activeModel}
-          </Badge>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-mono text-zinc-700 dark:text-zinc-300 font-semibold">
+              {activeModel}
+            </span>
+            <Badge variant={activeModel.includes('pro') ? 'gold' : 'emerald'} size="sm">
+              {activeModel.includes('pro') ? 'Berbayar' : 'Gratis'}
+            </Badge>
+          </div>
         </div>
 
         {/* Search Input Form */}
@@ -162,7 +178,9 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
                   : errorType === 'QUOTA_EXCEEDED'
                   ? 'Batas kuota harian Gemini sedang penuh. Coba sebentar lagi ya.'
                   : errorType === 'MODEL_UNSUPPORTED'
-                  ? 'Model Gemini ini tidak didukung oleh akunmu. Coba ganti ke model Flash ya.'
+                  ? activeModel.includes('pro')
+                    ? 'Model Pro membutuhkan API Key tier berbayar (Pay-as-you-go). Silakan ganti ke model gratis (Gemini 3.6 Flash) di Pengaturan.'
+                    : 'Model ini tidak didukung oleh akunmu. Silakan gunakan model gratis Gemini 3.6 Flash di Pengaturan ya.'
                   : 'Coba periksa koneksi internetmu sebentar ya.'}
               </p>
             </div>
@@ -231,16 +249,41 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
               </div>
             )}
 
-            <Button
-              variant="primary"
-              size="sm"
-              fullWidth
-              onClick={handleAddToHabits}
-              className="mt-2"
-            >
-              <PlusCircle size={16} weight="bold" />
-              <span>Simpan ke Amalan Harian</span>
-            </Button>
+            {/* Action Buttons */}
+            <div className="space-y-2 pt-1">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                fullWidth
+                onClick={handleAddToHabits}
+              >
+                <PlusCircle size={16} weight="bold" />
+                <span>Simpan & Jadikan Amalan Harian</span>
+              </Button>
+
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={handleSaveToCollectionOnly}
+                disabled={isSavedToCollection}
+                className={isSavedToCollection ? 'text-emerald-600 dark:text-emerald-400 border-emerald-500/30' : ''}
+              >
+                {isSavedToCollection ? (
+                  <>
+                    <Check size={16} weight="bold" className="text-emerald-600 dark:text-emerald-400" />
+                    <span>Tersimpan di Koleksi Doa</span>
+                  </>
+                ) : (
+                  <>
+                    <BookBookmark size={16} />
+                    <span>Simpan ke Koleksi Doa Saja</span>
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         )}
       </div>

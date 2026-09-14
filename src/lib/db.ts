@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import { Settings, Habit, DailyLog, QuranState, Ayah } from '@/types';
+import { Settings, Habit, DailyLog, QuranState, Ayah, SavedPrayer } from '@/types';
 import { DEFAULT_HABITS, DEFAULT_SETTINGS, DEFAULT_QURAN_STATE } from './constants';
 import { logError } from './logger';
 
@@ -9,6 +9,7 @@ export class IstiqomahDatabase extends Dexie {
   dailyLogs!: EntityTable<DailyLog, 'id'>;
   quranState!: EntityTable<QuranState, 'id'>;
   ayahs!: EntityTable<Ayah, 'number'>;
+  savedPrayers!: EntityTable<SavedPrayer, 'id'>;
 
   constructor() {
     super('IstiqomahDB');
@@ -19,6 +20,10 @@ export class IstiqomahDatabase extends Dexie {
       dailyLogs: '++id, date, habitId, completed, [date+habitId]',
       quranState: 'id',
       ayahs: 'number, surahNumber, juz, numberInSurah',
+    });
+
+    this.version(2).stores({
+      savedPrayers: 'id, category, createdAt, habitId',
     });
 
     this.on('populate', () => {
@@ -37,6 +42,17 @@ export async function ensureInitialDbData() {
     const settingsCount = await db.settings.count();
     if (settingsCount === 0) {
       await db.settings.add(DEFAULT_SETTINGS);
+    } else {
+      // Auto-migrate deprecated models to gemini-3.6-flash
+      const currentSettings = await db.settings.get('main');
+      if (
+        currentSettings &&
+        (currentSettings.geminiModel === ('gemini-2.0-flash' as any) ||
+          currentSettings.geminiModel === ('gemini-2.0-flash-lite' as any) ||
+          !currentSettings.geminiModel)
+      ) {
+        await db.settings.update('main', { geminiModel: 'gemini-3.6-flash' });
+      }
     }
 
     const habitsCount = await db.habits.count();

@@ -16,7 +16,7 @@ Aplikasi Web Progresif (PWA) Islami yang modern, cepat, dan berfokus penuh pada 
 
 Sebagian besar aplikasi pencatat ibadah mewajibkan pembuatan akun, menyimpan catatan pribadi pengguna di cloud server, atau membatasi fitur pencarian doa di balik biaya langganan berbayar. Istiqomah dibangun dengan tiga pilar arsitektur:
 
-1. **Local-First & Kedaulatan Data**: Seluruh data amalan, riwayat tilawah, dan progres khatam tersimpan di IndexedDB browser menggunakan Dexie.js v4. Tidak ada server eksternal yang dapat membaca atau mengakses data ibadah Anda.
+1. **Local-First & Kedaulatan Data**: Seluruh data amalan, riwayat tilawah, progres khatam, dan koleksi doa tersimpan di IndexedDB browser menggunakan Dexie.js v4. Tidak ada server eksternal yang dapat membaca atau mengakses data ibadah Anda.
 2. **Bring Your Own Key (BYOK)**: Pengguna menggunakan kunci API Google Gemini pribadi yang diperoleh gratis dari Google AI Studio. Tidak ada biaya langganan dan tidak ada kuota terpusat.
 3. **Kriptografi Berlapis (Defense-in-Depth)**: Kunci API dienkripsi secara lokal menggunakan Web Crypto API standar industri (**AES-GCM 256-bit** dengan derivasi kunci **PBKDF2 100.000 iterasi**) sebelum disimpan ke IndexedDB. Material kunci tidak pernah diekspor dalam berkas cadangan data.
 4. **Dukungan PWA Offline Penuh**: Dapat diinstall di Android, iOS, iPadOS, Windows, maupun macOS, serta berfungsi optimal dalam kondisi offline tanpa koneksi internet.
@@ -28,7 +28,11 @@ Sebagian besar aplikasi pencatat ibadah mewajibkan pembuatan akun, menyimpan cat
 ### 1. Pelacak Rutinitas Ibadah Harian
 - **Pencatatan 1-Tap**: Interaksi cepat (kurang dari 3 detik) dengan animasi transisi pegas (spring physics) berbasis Framer Motion.
 - **Segmentasi Waktu Ibadah**: Pengelompokan Sholat Wajib 5 Waktu, Amalan Sunnah (Dhuha, Tahajjud, Rawatib), serta Dzikir Pagi dan Petang.
-- **Kustomisasi Amalan**: Tambahkan amalan pribadi dengan penentuan target waktu (Subuh, Siang, Maghrib, Malam, atau Kapanpun).
+- **Kustomisasi & Pengeditan Amalan**:
+  - Seluruh amalan (sholat fardhu, sunnah, dzikir, dan amalan kustom) dapat diedit nama, waktu pelaksanaan, dan catatan khususnya melalui modal edit terpadu.
+  - **Proteksi Amalan Wajib**: Sholat wajib 5 waktu dilindungi dari penghapusan dan kategorinya terkunci permanen pada amalan fardhu demi menjaga rukun Islam.
+  - **Penghapusan Amalan Non-Wajib**: Amalan sunnah, dzikir, dan amalan kustom dapat dihapus dengan konfirmasi dialog aman yang membersihkan data beserta riwayat hariannya dari IndexedDB.
+- **Tombol "Baca Doa" Langsung**: Amalan yang memiliki teks doa/dzikir (seperti Sayyidul Istighfar atau hasil pencarian AI) dilengkapi tombol langsung untuk membuka lafaz Arab dan artinya saat beribadah.
 - **Indikator Konsistensi (Streak)**: Visualisasi api dinamis, pelacak rekor hari terpanjang, dan bar persentase capaian harian.
 
 ### 2. Al-Quran Al-Karim & Pelacak Khatam
@@ -39,28 +43,32 @@ Sebagian besar aplikasi pencatat ibadah mewajibkan pembuatan akun, menyimpan cat
   - **Mode Arab + Arti**: Teks Arab berdampingan dengan terjemahan Indonesia tanpa teks transliterasi.
 - **Pewarnaan Tajwid Interaktif (11 Kaidah)**:
   - Teks Arab dipetakan berdasarkan standar mushaf Kemenag RI dan Madinah (Qalqalah, Ikhfa, Idgham Bighunnah, Idgham Bilaghunnah, Iqlab, Ghunnah Musyaddadah, Mad Thobi'i, Mad Wajib/Jaiz, Mad Lazim, Ikhfa Syafawi, Idgham Mimi).
-  - Sentuh kata atau huruf berwarna untuk membuka kartu popover informasi hukum, jumlah ketukan harakat, dan tata cara baca.
+  - Popover penjelasan hukum tajwid muncul secara kontekstual tepat di bawah ayat yang disentuh (bukan di dasar layar), menampilkan nama kaidah, jumlah ketukan harakat, dan tata cara baca.
 - **Kamus Kaidah Tajwid Terpadu**: Modul referensi mandiri untuk hukum nun sukun, mim sukun, ragam mad, qalqalah, dan makhraj huruf hijaiyah.
 - **Pelacak Target 30 Juz & Bookmark**: Pelacak progres menuju 6.236 ayat, penanda ayat terakhir dibaca otomatis, serta formulir pencatatan manual dari mushaf cetak.
 
-### 3. Asisten Doa Cerdas (Google Gemini AI)
-- Pencarian doa dan dzikir shahih dari Al-Quran dan As-Sunnah berdasarkan keadaan hati, kegelisahan, atau hajat hidup yang sedang dialami.
-- **Pemilihan Model AI Fleksibel**:
-  - `gemini-2.0-flash`: Model bawaan berkecepatan tinggi dan berkuota harian gratis.
-  - `gemini-2.0-flash-lite`: Varian hemat kuota dengan latensi respons terendah.
-  - `gemini-2.5-flash`: Model generasi terbaru dengan daya penalaran kontekstual lebih mendalam.
-  - `gemini-2.5-pro`: Kapasitas penalaran tertinggi untuk kebutuhan telaah mendalam.
-- **Konversi Otomatis ke Rutinitas**: Doa hasil rekomendasi dapat ditambahkan langsung ke daftar target amalan harian dengan satu klik.
+### 3. Asisten Doa Cerdas & Koleksi Doa Tersimpan (AI Powered)
+- Pencarian doa dan dzikir shahih dari Al-Quran dan As-Sunnah berdasarkan keadaan hati, kegelisahan, atau hajat hidup menggunakan Google Gemini AI.
+- **Pemilihan Model AI Fleksibel (Transparansi Model Gratis & Berbayar)**:
+  - `gemini-3.6-flash` (100% Gratis, Rekomendasi Bawaan): Model generasi terbaru dengan respons kilat, pemahaman hadis mendalam, dan kuota gratis harian dari Google AI Studio.
+  - `gemini-2.5-flash` (100% Gratis): Model alternatif stabil dan ringan dengan kuota gratis harian.
+  - `gemini-2.5-pro` (Tier Berbayar): Penalaran mendalam untuk telaah komprehensif (khusus API Key tier berbayar Google Cloud / Pay-as-you-go).
+- **Penyimpanan Penuh (Full Prayer Data)**:
+  - Doa yang ditemukan disimpan secara utuh ke database lokal (Teks Arab berharakat, Transliterasi Latin, Terjemahan Indonesia, Rujukan Hadis, dan Keutamaan/Faidah).
+  - Pilihan fleksibel: **Simpan & Jadikan Amalan Harian** atau **Simpan ke Koleksi Doa Saja** (arsip referensi tanpa membebani daftar amalan harian).
+- **Mode Pembaca Doa Terpadu (`PrayerReaderModal`)**: Tampilan bacaan dengan tipografi Arab berukuran besar yang nyaman, transliterasi, terjemahan, tombol salin teks satu-klik, dan tombol "Tandai Selesai Dibaca" yang otomatis mencentang amalan harian.
+- **Pustaka "Koleksi Doa" di Beranda**: Menu koleksi doa tersimpan dengan pencarian instan, memudahkan membaca ulang kapan saja secara luring (offline) tanpa perlu membuka aplikasi lain.
 
 ### 4. Analisis & Gamifikasi Positif
 - **Peta Konsistensi (Heatmap)**: Matriks aktivitas 10 pekan terakhir dengan gradasi warna hijau emerald.
 - **Grafik Batang Mingguan**: Evaluasi tren persentase ketercapaian ibadah selama 7 hari berjalan.
 - **Enam Lencana Apresiasi Amal**: Sistem rekognisi ibadah yang didasarkan pada rujukan hadits shahih (seperti Penjaga Sholat, Pecinta Al-Quran, dan Ahli Dzikir).
 
-### 5. Pengaturan & Pengalaman Antarmuka
+### 5. Pengaturan & Pengalaman Antarmuka PWA
+- **Instalasi PWA Terpadu**: Dialog panduan pemasangan otomatis (`PwaInstallModal`) dengan deteksi perangkat cerdas (Chrome Android, Safari iOS / Tambah ke Layar Utama, Desktop Chrome/Edge), serta kartu status instalasi di Pengaturan.
 - **Dukungan Dual-Theme Mandiri**: Mode Gelap (Zinc-950 off-black) dan Mode Terang (Slate-50) dengan kontras teks yang memenuhi standar WCAG AA.
 - **Desain Mobile-First & Gestur Sentuh**: Seluruh dialog popup dirancang sebagai lembar modal bawah (bottom sheet) yang mendukung gestur geser turun (drag-to-dismiss) untuk menutup tampilan.
-- **Manajemen Cadangan Data (Backup & Restore)**: Unduh salinan data format JSON dan pulihkan riwayat ibadah secara mandiri kapan saja.
+- **Manajemen Cadangan Data (Backup & Restore)**: Unduh salinan data format JSON (mencakup pengaturan, amalan, riwayat harian, status tilawah, dan koleksi doa tersimpan) dan pulihkan kapan saja secara mandiri.
 
 ---
 
@@ -169,12 +177,12 @@ istiqomah/
 ├── src/
 │   ├── components/
 │   │   ├── analytics/      # Heatmap, BarChart, BadgeGrid, dan StatsCard
-│   │   ├── home/           # HabitCard, StreakIndicator, PrayerSearchModal, ApiKeyPromptModal
+│   │   ├── home/           # HabitCard, EditHabitModal, PrayerSearchModal, PrayerReaderModal, SavedPrayersModal, ApiKeyPromptModal
 │   │   ├── layout/         # AppShell dan BottomNav
 │   │   ├── quran/          # SurahList, AyahReader, TajweedText, TajweedGuideModal, KhatamProgress
-│   │   ├── settings/       # ThemeToggle, ApiKeyInput, ModelSelector, dan DataManager
-│   │   └── ui/             # Modal (Bottom Sheet), Button, Card, ProgressBar, dan Badge
-│   ├── hooks/              # useDailyLog, useQuranReader, useHabits, dan useStreak
+│   │   ├── settings/       # ThemeToggle, ApiKeyInput, ModelSelector, PwaInstallCard, dan DataManager
+│   │   └── ui/             # Modal (Bottom Sheet), PwaInstallModal, Button, Card, ProgressBar, dan Badge
+│   ├── hooks/              # useDailyLog, useQuranReader, useHabits, useStreak, useSavedPrayers, usePwaInstall
 │   ├── lib/
 │   │   ├── crypto.ts       # Enkripsi Web Crypto API (AES-GCM 256-bit)
 │   │   ├── data-manager.ts # Sanitasi ekspor, impor, dan reset data JSON

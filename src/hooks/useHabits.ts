@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '@/lib/db';
-import { Habit, HabitCategory, TimeOfDay } from '@/types';
+import { Habit, HabitCategory, TimeOfDay, PrayerData } from '@/types';
 
 export function useHabits() {
   const habits = useLiveQuery(
@@ -13,6 +13,7 @@ export function useHabits() {
     category: HabitCategory;
     timeOfDay: TimeOfDay;
     description?: string;
+    prayerData?: PrayerData;
   }) => {
     const currentCount = (await db.habits.count()) || 0;
     const newHabit: Habit = {
@@ -24,15 +25,47 @@ export function useHabits() {
       isCustom: true,
       createdAt: new Date().toISOString(),
       order: currentCount + 1,
+      prayerData: habitData.prayerData,
     };
 
     await db.habits.add(newHabit);
     return newHabit;
   };
 
+  const updateHabit = async (
+    habitId: string,
+    updates: {
+      title: string;
+      category?: HabitCategory;
+      timeOfDay: TimeOfDay;
+      description?: string;
+      prayerData?: PrayerData;
+    }
+  ) => {
+    const habit = await db.habits.get(habitId);
+    if (!habit) return;
+
+    // Amalan wajib tidak dapat diubah kategorinya
+    const category = habit.category === 'wajib' ? 'wajib' : (updates.category ?? habit.category);
+
+    await db.habits.update(habitId, {
+      title: updates.title.trim(),
+      category,
+      timeOfDay: updates.timeOfDay,
+      description: updates.description?.trim() || undefined,
+      ...(updates.prayerData !== undefined ? { prayerData: updates.prayerData } : {}),
+    });
+  };
+
   const deleteHabit = async (habitId: string) => {
+    const habit = await db.habits.get(habitId);
+    // Amalan wajib tidak dapat dihapus
+    if (habit?.category === 'wajib') {
+      return;
+    }
+
     await db.habits.delete(habitId);
-    // Also delete today's log for this habit if any
+    // Hapus juga catatan harian terkait amalan ini
     const todayLogs = await db.dailyLogs.where('habitId').equals(habitId).toArray();
     if (todayLogs.length > 0) {
       await db.dailyLogs.where('habitId').equals(habitId).delete();
@@ -43,6 +76,7 @@ export function useHabits() {
     habits: habits || [],
     isLoading: habits === undefined,
     addHabit,
+    updateHabit,
     deleteHabit,
   };
 }

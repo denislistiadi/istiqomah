@@ -9,7 +9,9 @@ export interface HabitGroupProps {
   habits: Habit[];
   isHabitCompleted: (id: string) => boolean;
   onToggleHabit: (id: string) => void;
-  onDeleteHabit?: (id: string) => void;
+  onEditHabit?: (habit: Habit) => void;
+  onDeleteHabit?: (habit: Habit) => void;
+  onReadPrayerHabit?: (habit: Habit) => void;
 }
 
 export const HabitGroup: React.FC<HabitGroupProps> = ({
@@ -18,7 +20,9 @@ export const HabitGroup: React.FC<HabitGroupProps> = ({
   habits,
   isHabitCompleted,
   onToggleHabit,
+  onEditHabit,
   onDeleteHabit,
+  onReadPrayerHabit,
 }) => {
   if (habits.length === 0) return null;
 
@@ -53,7 +57,9 @@ export const HabitGroup: React.FC<HabitGroupProps> = ({
             habit={habit}
             completed={isHabitCompleted(habit.id)}
             onToggle={onToggleHabit}
+            onEdit={onEditHabit}
             onDelete={onDeleteHabit}
+            onReadPrayer={onReadPrayerHabit}
           />
         ))}
       </div>

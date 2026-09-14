@@ -113,13 +113,20 @@ export const DEFAULT_HABITS: Habit[] = [
     isCustom: false,
     createdAt: new Date().toISOString(),
     order: 11,
+    prayerData: {
+      arabic: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',
+      latin: "Allahumma anta rabbi laa ilaaha illaa anta, khalaqtanii wa anaa 'abduka, wa anaa 'alaa 'ahdika wa wa'dika mastatha'tu, a'uudzu bika min syarri maa shana'tu, abuu-u laka bini'matika 'alayya, wa abuu-u bidzanbii faghfir lii fa-innahu laa yaghfirudz-dzunuuba illaa anta.",
+      translation: 'Ya Allah, Engkau adalah Rabbku, tidak ada ilah yang berhak diibadahi selain Engkau. Engkau-lah yang menciptakanku dan aku adalah hamba-Mu. Aku berada di atas janji dan ikrar-Mu semampuku. Aku berlindung kepada-Mu dari keburukan apa yang kuperbuat. Aku mengakui kenikmatan-Mu kepadaku dan aku mengakui dosaku, maka ampunilah aku, karena tidak ada yang mengampuni dosa kecuali Engkau.',
+      source: 'HR. Bukhari no. 6306 (Sayyidul Istighfar)',
+      benefit: 'Siapa yang membacanya dengan penuh keyakinan lalu meninggal pada hari/malam tersebut, ia termasuk penghuni surga.',
+    },
   },
 ];
 
 export const DEFAULT_SETTINGS: Settings = {
   id: 'main',
   theme: 'dark',
-  geminiModel: 'gemini-2.0-flash',
+  geminiModel: 'gemini-3.6-flash',
   notificationsEnabled: false,
   subuhTime: '04:30',
   maghribTime: '18:00',

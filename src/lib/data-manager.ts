@@ -8,6 +8,7 @@ export async function exportUserData(): Promise<string> {
   const habits = await db.habits.toArray();
   const dailyLogs = await db.dailyLogs.toArray();
   const quranState = await db.quranState.toArray();
+  const savedPrayers = await db.savedPrayers.toArray();
 
   const sanitizedSettings = settings.map(s => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,6 +23,7 @@ export async function exportUserData(): Promise<string> {
     habits,
     dailyLogs,
     quranState,
+    savedPrayers,
   };
 
   return JSON.stringify(exportPayload, null, 2);
@@ -83,6 +85,16 @@ function isValidQuranState(qs: unknown): boolean {
   );
 }
 
+function isValidSavedPrayer(p: unknown): boolean {
+  if (!isSafeObject(p)) return false;
+  return (
+    typeof p.id === 'string' &&
+    typeof p.title === 'string' &&
+    typeof p.arabic === 'string' &&
+    typeof p.translation === 'string'
+  );
+}
+
 export async function importUserData(jsonString: string): Promise<boolean> {
   try {
     const data = JSON.parse(jsonString);
@@ -98,6 +110,9 @@ export async function importUserData(jsonString: string): Promise<boolean> {
     const validQuranState = Array.isArray(data.quranState)
       ? data.quranState.filter(isValidQuranState)
       : [];
+    const validSavedPrayers = Array.isArray(data.savedPrayers)
+      ? data.savedPrayers.filter(isValidSavedPrayer)
+      : [];
 
     if (validSettings.length === 0) {
       throw new Error('Tidak ditemukan data pengaturan yang valid dalam berkas cadangan');
@@ -110,7 +125,7 @@ export async function importUserData(jsonString: string): Promise<boolean> {
       return safe;
     });
 
-    await db.transaction('rw', [db.settings, db.habits, db.dailyLogs, db.quranState], async () => {
+    await db.transaction('rw', [db.settings, db.habits, db.dailyLogs, db.quranState, db.savedPrayers], async () => {
       await db.settings.clear();
       await db.settings.bulkAdd(sanitizedSettings);
 
@@ -124,6 +139,11 @@ export async function importUserData(jsonString: string): Promise<boolean> {
         await db.quranState.clear();
         await db.quranState.bulkAdd(validQuranState);
       }
+
+      await db.savedPrayers.clear();
+      if (validSavedPrayers.length > 0) {
+        await db.savedPrayers.bulkAdd(validSavedPrayers);
+      }
     });
 
     return true;
@@ -134,7 +154,7 @@ export async function importUserData(jsonString: string): Promise<boolean> {
 }
 
 export async function resetAllData(): Promise<void> {
-  await db.transaction('rw', [db.settings, db.habits, db.dailyLogs, db.quranState, db.ayahs], async () => {
+  await db.transaction('rw', [db.settings, db.habits, db.dailyLogs, db.quranState, db.ayahs, db.savedPrayers], async () => {
     await db.settings.clear();
     await db.settings.add(DEFAULT_SETTINGS);
 
@@ -147,6 +167,8 @@ export async function resetAllData(): Promise<void> {
     await db.quranState.add(DEFAULT_QURAN_STATE);
 
     await db.ayahs.clear();
+
+    await db.savedPrayers.clear();
   });
 }
 

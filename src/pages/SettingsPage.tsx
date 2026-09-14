@@ -93,7 +93,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
 
         <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800/80">
           <ModelSelector
-            selectedModel={settings?.geminiModel || 'gemini-2.0-flash'}
+            selectedModel={settings?.geminiModel || 'gemini-3.6-flash'}
             onSelectModel={handleSelectModel}
           />
         </div>

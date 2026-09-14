@@ -76,10 +76,10 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
         })}
       </div>
 
-      <div className="p-3 rounded-xl bg-zinc-100/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/60 flex items-start gap-2 text-[11px] text-zinc-600 dark:text-zinc-400">
-        <Sparkle size={14} className="text-amber-500 shrink-0 mt-0.5" />
+      <div className="p-3.5 rounded-xl bg-zinc-100/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800/60 flex items-start gap-2.5 text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <Sparkle size={15} className="text-amber-500 shrink-0 mt-0.5" />
         <span>
-          Model <strong>Flash</strong> adalah pilihan default gratis dari Google. Kalau kamu punya API key berbayar dan ingin tafsir atau rujukan hadis yang lebih lengkap, silakan pilih <strong>Gemini 2.5 Pro</strong> ya.
+          Model <strong>Gemini 3.6 Flash</strong> dan <strong>2.5 Flash</strong> adalah model <strong>100% Gratis</strong> dengan batas kuota harian dari Google AI Studio. Model <strong>Gemini 2.5 Pro</strong> membutuhkan akun Google Cloud dengan penagihan aktif (Pay-as-you-go).
         </span>
       </div>
     </div>

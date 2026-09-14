@@ -1,6 +1,5 @@
 export type GeminiModel =
-  | 'gemini-2.0-flash'
-  | 'gemini-2.0-flash-lite'
+  | 'gemini-3.6-flash'
   | 'gemini-2.5-flash'
   | 'gemini-2.5-pro';
 
@@ -14,28 +13,22 @@ export interface GeminiModelOption {
 
 export const GEMINI_MODELS: GeminiModelOption[] = [
   {
-    value: 'gemini-2.0-flash',
-    label: 'Gemini 2.0 Flash',
-    description: 'Cepat, cerdas, dan gratis kuota harian. Pas banget untuk cari doa sehari-hari.',
-    badge: 'Rekomendasi',
-  },
-  {
-    value: 'gemini-2.0-flash-lite',
-    label: 'Gemini 2.0 Flash Lite',
-    description: 'Super enteng, hemat kuota data, dan responsnya kilat.',
-    badge: 'Paling Ringan',
+    value: 'gemini-3.6-flash',
+    label: 'Gemini 3.6 Flash',
+    description: 'Model generasi terbaru. Respons kilat, pemahaman hadis tajam, dan 100% gratis kuota harian dari Google.',
+    badge: 'Gratis (Rekomendasi)',
   },
   {
     value: 'gemini-2.5-flash',
     label: 'Gemini 2.5 Flash',
-    description: 'Model generasi baru dengan pemahaman hadis dan konteks yang lebih tajam.',
-    badge: 'Terbaru',
+    description: 'Model alternatif yang stabil dan ringan. Gratis kuota harian dari Google.',
+    badge: 'Gratis',
   },
   {
     value: 'gemini-2.5-pro',
     label: 'Gemini 2.5 Pro',
-    description: 'Penalaran paling mendalam untuk tafsir komprehensif (khusus tier API berbayar).',
-    badge: 'Pro Tier',
+    description: 'Penalaran paling mendalam untuk telaah komprehensif (khusus API Key tier berbayar / Pay-as-you-go).',
+    badge: 'Berbayar (Pro)',
     isPaidRecommended: true,
   },
 ];
@@ -57,6 +50,22 @@ export interface Settings {
 export type HabitCategory = 'wajib' | 'sunnah' | 'dzikir';
 export type TimeOfDay = 'subuh' | 'siang' | 'maghrib' | 'malam' | 'kapanpun';
 
+export interface PrayerData {
+  arabic: string;
+  latin: string;
+  translation: string;
+  source: string;
+  benefit?: string;
+}
+
+export interface SavedPrayer extends PrayerData {
+  id: string;
+  title: string;
+  category?: string;
+  createdAt: string;
+  habitId?: string;
+}
+
 export interface Habit {
   id: string;
   title: string;
@@ -66,6 +75,7 @@ export interface Habit {
   isCustom: boolean;
   createdAt: string;
   order: number;
+  prayerData?: PrayerData;
 }
 
 export interface DailyLog {
