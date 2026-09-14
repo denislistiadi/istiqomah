@@ -108,7 +108,7 @@ export const PrayerSearchModal: React.FC<PrayerSearchModalProps> = ({
         </form>
 
         {/* Quick Suggestion Chips */}
-        <div className="flex flex-wrap gap-1.5 pt-1">
+        <div className="flex flex-wrap gap-1.5 pt-1 pb-2">
           {[
             'Hati lagi cemas',
             'Biar rezeki berkah',

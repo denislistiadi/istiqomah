@@ -91,11 +91,14 @@ export const Modal: React.FC<ModalProps> = ({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0.05, bottom: 0.6 }}
             onDragEnd={handleDragEnd}
-            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[28px] sm:rounded-3xl p-5 sm:p-6 shadow-2xl shadow-zinc-950/50 dark:shadow-black/95 max-h-[85dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 pb-safe pb-6 sm:pb-6 touch-manipulation`}
+            className={`relative w-full ${maxWClasses} glass-modal rounded-t-[32px] sm:rounded-3xl px-5 pt-3 pb-8 sm:px-6 sm:pt-5 sm:pb-6 shadow-2xl shadow-zinc-950/50 dark:shadow-black/95 max-h-[88dvh] sm:max-h-[85vh] flex flex-col z-10 text-zinc-900 dark:text-zinc-100 touch-manipulation`}
+            style={{
+              paddingBottom: 'max(env(safe-area-inset-bottom, 0px) + 2rem, 2rem)',
+            }}
           >
             {/* Mobile Sheet Pull Indicator Area */}
             <div
-              className="w-full flex items-center justify-center py-2 -mt-3 mb-1 sm:hidden cursor-grab active:cursor-grabbing touch-none select-none"
+              className="w-full flex items-center justify-center py-2 -mt-1 mb-1 sm:hidden cursor-grab active:cursor-grabbing touch-none select-none"
               onPointerDown={(e) => dragControls.start(e)}
             >
               <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full hover:bg-zinc-400 dark:hover:bg-zinc-600 transition-colors" />
@@ -127,8 +130,8 @@ export const Modal: React.FC<ModalProps> = ({
               </div>
             )}
 
-            {/* Content body with responsive scrolling */}
-            <div className="overflow-y-auto flex-1 pr-1 overscroll-contain custom-scroll">
+            {/* Content body with responsive scrolling & bottom breathing room */}
+            <div className="overflow-y-auto flex-1 pr-1 pb-4 sm:pb-2 overscroll-contain custom-scroll">
               {children}
             </div>
           </motion.div>
